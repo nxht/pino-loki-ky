@@ -1,9 +1,9 @@
-import type { Got } from 'got'
-import got, { RequestError } from 'got'
+import ky, { HTTPError } from 'ky'
+import type { KyInstance } from 'ky'
 
 import debug from './debug'
 import { LogBuilder } from './log_builder'
-import type { PinoLog, LokiOptions } from './types'
+import type { LokiOptions, PinoLog } from './types'
 
 /**
  * Responsible for pushing logs to Loki
@@ -11,14 +11,14 @@ import type { PinoLog, LokiOptions } from './types'
 export class LogPusher {
   #options: LokiOptions
   #logBuilder: LogBuilder
-  #client: Got
+  #client: KyInstance
 
   constructor(options: LokiOptions) {
     this.#options = options
 
-    this.#client = got.extend({
+    this.#client = ky.extend({
       ...(this.#options.host && { prefixUrl: this.#options.host }),
-      timeout: { request: this.#options.timeout ?? 30_000 },
+      timeout: this.#options.timeout ?? 30_000 ,
       headers: options.headers ?? {},
       ...(this.#options.basicAuth && {
         username: this.#options.basicAuth?.username,
@@ -40,7 +40,7 @@ export class LogPusher {
       return
     }
 
-    if (err instanceof RequestError) {
+    if (err instanceof HTTPError) {
       console.error(
         'Got error when trying to send log to Loki:',
         err.message + '\n' + err.response?.body,

@@ -1,4 +1,4 @@
-import got from 'got'
+import ky from 'ky'
 
 interface QueryRangeResponse<StreamType extends Record<string, string>> {
   status: string
@@ -13,7 +13,7 @@ interface QueryRangeResponse<StreamType extends Record<string, string>> {
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class LokiClient {
-  static client = got.extend({
+  static client = ky.extend({
     prefixUrl: process.env.LOKI_HOST!,
     username: process.env.LOKI_USERNAME!,
     password: process.env.LOKI_PASSWORD!,
