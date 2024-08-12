@@ -16,14 +16,17 @@ export class LogPusher {
   constructor(options: LokiOptions) {
     this.#options = options
 
+    const headers = options.headers ?? {}
+    if (options.basicAuth) {
+      headers['Authorization'] = `Basic ${Buffer.from(
+        `${options.basicAuth.username}:${options.basicAuth.password}`,
+      ).toString('base64')}`
+    }
+
     this.#client = ky.extend({
       ...(this.#options.host && { prefixUrl: this.#options.host }),
-      timeout: this.#options.timeout ?? 30_000 ,
-      headers: options.headers ?? {},
-      ...(this.#options.basicAuth && {
-        username: this.#options.basicAuth?.username,
-        password: this.#options.basicAuth?.password,
-      }),
+      timeout: this.#options.timeout ?? 30_000,
+      headers,
     })
 
     this.#logBuilder = new LogBuilder({

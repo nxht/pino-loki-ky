@@ -15,8 +15,11 @@ interface QueryRangeResponse<StreamType extends Record<string, string>> {
 export class LokiClient {
   static client = ky.extend({
     prefixUrl: process.env.LOKI_HOST!,
-    username: process.env.LOKI_USERNAME!,
-    password: process.env.LOKI_PASSWORD!,
+    headers: {
+      Authorization: `Basic ${Buffer.from(
+        `${process.env.LOKI_USERNAME}:${process.env.LOKI_PASSWORD}`,
+      ).toString('base64')}`,
+    },
   })
 
   static getLogs(query: string) {
