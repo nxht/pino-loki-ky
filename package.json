@@ -2,7 +2,7 @@
 	"name": "pino-loki-ky",
 	"type": "commonjs",
 	"version": "2.3.0",
-	"description": "A transport for pino that sends messages to Loki",
+	"description": "Fork of pino-loki that uses `ky` instead of `got`.",
 	"license": "MIT",
 	"homepage": "https://github.com/nxht/pino-loki-ky#readme",
 	"repository": {
