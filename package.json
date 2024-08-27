@@ -1,77 +1,69 @@
 {
-  "name": "pino-loki-ky",
-  "type": "commonjs",
-  "version": "2.3.0",
-  "description": "A transport for pino that sends messages to Loki",
-  "license": "MIT",
-  "homepage": "https://github.com/nxht/pino-loki-ky#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nxht/pino-loki-ky.git"
-  },
-  "bugs": {
-    "url": "https://github.com/nxht/pino-loki-ky/issues"
-  },
-  "keywords": [
-    "pino",
-    "pino-transport",
-    "loki",
-    "logging"
-  ],
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "rimraf dist && unbuild",
-    "dev": "unbuild --stub",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "prepublishOnly": "pnpm build",
-    "release": "bumpp --commit --push --tag && pnpm publish",
-    "stub": "unbuild --stub",
-    "quick:test": "node -r ts-node/register bin/test.ts",
-    "test": "c8 node -r ts-node/register bin/test.ts",
-    "typecheck": "tsc --noEmit",
-    "checks": "pnpm typecheck && pnpm lint && pnpm test"
-  },
-  "dependencies": {
-    "ky": "^1.7.1",
-    "pino-abstract-transport": "^1.2.0"
-  },
-  "optionalDependencies": {
-    "commander": "^12.1.0",
-    "pump": "^3.0.0"
-    
-  },
-  "devDependencies": {
-    "@japa/assert": "^1.4.1",
-    "@japa/runner": "^2.5.1",
-    "@japa/spec-reporter": "^1.3.3",
-    "@julr/tooling-configs": "^2.2.0",
-    "@types/node": "^20.12.11",
-    "@types/pump": "^1.1.3",
-    "bumpp": "^9.4.1",
-    "c8": "^9.1.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^8.57.0",
-    "nock": "^13.5.4",
-    "pino": "^9.0.0",
-    "pino-pretty": "^11.0.0",
-    "prettier": "^3.2.5",
-    "rimraf": "^5.0.6",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "unbuild": "^2.0.0"
-  },
-  "prettier": "@julr/tooling-configs/prettier"
+	"name": "pino-loki-ky",
+	"type": "commonjs",
+	"version": "2.3.0",
+	"description": "A transport for pino that sends messages to Loki",
+	"license": "MIT",
+	"homepage": "https://github.com/nxht/pino-loki-ky#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nxht/pino-loki-ky.git"
+	},
+	"bugs": {
+		"url": "https://github.com/nxht/pino-loki-ky/issues"
+	},
+	"keywords": ["pino", "pino-transport", "loki", "logging"],
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"main": "./src/index.ts",
+	"module": "./src/index.ts",
+	"types": "./src/index.ts",
+	"files": ["dist"],
+	"scripts": {
+		"build": "rimraf dist && unbuild",
+		"dev": "unbuild --stub",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"prepublishOnly": "pnpm build",
+		"release": "bumpp --commit --push --tag && pnpm publish",
+		"stub": "unbuild --stub",
+		"quick:test": "node -r ts-node/register bin/test.ts",
+		"test": "c8 node -r ts-node/register bin/test.ts",
+		"typecheck": "tsc --noEmit",
+		"checks": "pnpm typecheck && pnpm lint && pnpm test"
+	},
+	"dependencies": {
+		"ky": "^1.7.1",
+		"pino-abstract-transport": "^1.2.0"
+	},
+	"optionalDependencies": {
+		"commander": "^12.1.0",
+		"pump": "^3.0.0"
+	},
+	"devDependencies": {
+		"@japa/assert": "^1.4.1",
+		"@japa/runner": "^2.5.1",
+		"@japa/spec-reporter": "^1.3.3",
+		"@julr/tooling-configs": "^2.2.0",
+		"@types/node": "^22.5.0",
+		"@types/pump": "^1.1.3",
+		"bumpp": "^9.4.1",
+		"c8": "^9.1.0",
+		"dotenv": "^16.4.5",
+		"eslint": "^8.57.0",
+		"nock": "^13.5.4",
+		"pino": "^9.0.0",
+		"pino-pretty": "^11.0.0",
+		"prettier": "^3.2.5",
+		"rimraf": "^5.0.6",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5",
+		"unbuild": "^2.0.0"
+	},
+	"prettier": "@julr/tooling-configs/prettier"
 }
