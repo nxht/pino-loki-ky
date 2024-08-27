@@ -1,7 +1,7 @@
 {
 	"name": "pino-loki-ky",
 	"type": "commonjs",
-	"version": "2.3.0-2",
+	"version": "2.3.0-3",
 	"description": "Fork of pino-loki that uses `ky` instead of `got`.",
 	"license": "MIT",
 	"homepage": "https://github.com/nxht/pino-loki-ky#readme",
@@ -14,13 +14,10 @@
 	},
 	"keywords": ["pino", "pino-transport", "loki", "logging"],
 	"main": "./dist/index.cjs",
-	"types": "./src/index.ts",
 	"exports": {
-		".": {
-			"bun": "./src/index.ts",
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.cjs"
-		}
+		"bun": "./src/index.ts",
+		"import": "./dist/index.mjs",
+		"require": "./dist/index.cjs"
 	},
 	"bin": {
 		"pino-loki-ky": "./dist/cli.mjs"
