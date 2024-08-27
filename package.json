@@ -15,9 +15,9 @@
 	"keywords": ["pino", "pino-transport", "loki", "logging"],
 	"main": "./dist/index.cjs",
 	"exports": {
-		"bun": "./src/index.ts",
 		"import": "./dist/index.mjs",
-		"require": "./dist/index.cjs"
+		"require": "./dist/index.cjs",
+		"bun": "./src/index.ts"
 	},
 	"bin": {
 		"pino-loki-ky": "./dist/cli.mjs"
