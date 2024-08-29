@@ -54,8 +54,11 @@ export class LogBuilder {
    * arrays to objects with indexes as keys.
    */
   #stringifyLog(log: PinoLog, convertArrays?: boolean): string {
-    return JSON.stringify(log, (_, value) => {
+    return JSON.stringify(log, (key, value) => {
       if (!convertArrays) return value;
+
+      // Exclude level as it's already on the label
+      if (key === 'level') return undefined;
 
       if (Array.isArray(value)) {
         return Object.fromEntries(value.map((value, index) => [index, value]));
