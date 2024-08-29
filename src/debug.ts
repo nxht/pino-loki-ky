@@ -1,3 +1,3 @@
-import { debuglog } from 'node:util'
+import { debuglog } from 'node:util';
 
-export default debuglog('pino-loki')
+export default debuglog('pino-loki');

@@ -1,19 +1,19 @@
-import { LokiLogLevel } from './types'
-import type { LokiLog, PinoLog, LokiOptions } from './types'
+import { LokiLogLevel } from './types';
+import type { LokiLog, LokiOptions, PinoLog } from './types';
 
-const NANOSECONDS_LENGTH = 19
+const NANOSECONDS_LENGTH = 19;
 
-type BuilderOptions = Pick<LokiOptions, 'propsToLabels' | 'levelMap'>
+type BuilderOptions = Pick<LokiOptions, 'propsToLabels' | 'levelMap'>;
 
 /**
  * Converts a Pino log to a Loki log
  */
 export class LogBuilder {
-  #propsToLabels: string[]
-  #levelMap: { [key: number]: LokiLogLevel }
+  #propsToLabels: string[];
+  #levelMap: { [key: number]: LokiLogLevel };
 
   constructor(options?: BuilderOptions) {
-    this.#propsToLabels = options?.propsToLabels || []
+    this.#propsToLabels = options?.propsToLabels || [];
     this.#levelMap = Object.assign(
       {
         10: LokiLogLevel.Debug,
@@ -24,7 +24,7 @@ export class LogBuilder {
         60: LokiLogLevel.Critical,
       },
       options?.levelMap,
-    )
+    );
   }
 
   /**
@@ -33,20 +33,20 @@ export class LogBuilder {
    */
   #buildTimestamp(log: PinoLog, replaceTimestamp?: boolean): string {
     if (replaceTimestamp) {
-      return (new Date().getTime() * 1_000_000).toString()
+      return (new Date().getTime() * 1_000_000).toString();
     }
 
-    const time = log.time || Date.now()
-    const strTime = time.toString()
+    const time = log.time || Date.now();
+    const strTime = time.toString();
 
     // Returns the time if it's already in nanoseconds
     if (strTime.length === NANOSECONDS_LENGTH) {
-      return strTime
+      return strTime;
     }
 
     // Otherwise, find the missing factor to convert it to nanoseconds
-    const missingFactor = 10 ** (19 - strTime.length)
-    return (time * missingFactor).toString()
+    const missingFactor = 10 ** (19 - strTime.length);
+    return (time * missingFactor).toString();
   }
 
   /**
@@ -55,59 +55,61 @@ export class LogBuilder {
    */
   #stringifyLog(log: PinoLog, convertArrays?: boolean): string {
     return JSON.stringify(log, (_, value) => {
-      if (!convertArrays) return value
+      if (!convertArrays) return value;
 
       if (Array.isArray(value)) {
-        return Object.fromEntries(value.map((value, index) => [index, value]))
+        return Object.fromEntries(value.map((value, index) => [index, value]));
       }
 
-      return value
-    })
+      return value;
+    });
   }
 
   #buildLabelsFromProps(log: PinoLog) {
-    const labels: Record<string, string> = {}
+    const labels: Record<string, unknown> = {};
 
     for (const prop of this.#propsToLabels) {
       if (log[prop]) {
-        labels[prop] = log[prop]
+        labels[prop] = log[prop];
+        log[prop] = undefined;
       }
     }
 
-    return labels
+    return labels;
   }
 
   /**
    * Convert a level to a human readable status
    */
   statusFromLevel(level: number) {
-    return this.#levelMap[level] || LokiLogLevel.Info
+    return this.#levelMap[level] || LokiLogLevel.Info;
   }
 
   /**
    * Build a loki log entry from a pino log
    */
   build(options: {
-    log: PinoLog
-    replaceTimestamp?: boolean
-    additionalLabels?: Record<string, string>
-    convertArrays?: boolean
+    log: PinoLog;
+    replaceTimestamp?: boolean;
+    additionalLabels?: Record<string, string>;
+    convertArrays?: boolean;
   }): LokiLog {
-    const status = this.statusFromLevel(options.log.level)
-    const time = this.#buildTimestamp(options.log, options.replaceTimestamp)
-    const propsLabels = this.#buildLabelsFromProps(options.log)
+    const status = this.statusFromLevel(options.log.level);
+    const time = this.#buildTimestamp(options.log, options.replaceTimestamp);
+    const propsLabels = this.#buildLabelsFromProps(options.log);
 
-    const hostname = options.log.hostname
-    options.log.hostname = undefined
+    const hostname = options.log.hostname as string;
+    options.log.hostname = undefined;
 
     return {
       stream: {
         level: status,
+        level_code: options.log.level,
         hostname,
         ...options.additionalLabels,
         ...propsLabels,
       },
       values: [[time, this.#stringifyLog(options.log, options.convertArrays)]],
-    }
+    };
   }
 }

@@ -1,9 +1,9 @@
-import pump from 'pump'
-import { program } from 'commander'
+import { program } from 'commander';
+import pump from 'pump';
 
-import build from './index'
-import pkg from '../package.json'
-import type { LokiOptions } from './types'
+import pkg from '../package.json';
+import build from './index';
+import type { LokiOptions } from './types';
 
 program
   .version(pkg.version)
@@ -11,23 +11,35 @@ program
   .option('-p, --password <password>', 'Loki password')
   .option('--hostname <hostname>', 'URL for Loki')
   .option('-b, --batch', 'Should logs be sent in batch mode')
-  .option('-i, --interval <interval>', 'The interval at which batched logs are sent in seconds')
+  .option(
+    '-i, --interval <interval>',
+    'The interval at which batched logs are sent in seconds',
+  )
   .option('-t, --timeout <timeout>', 'Timeout for request to Loki')
-  .option('-s, --silenceErrors', 'If false, errors will be displayed in the console')
-  .option('-r, --replaceTimestamp', 'Replace pino logs timestamps with Date.now()')
-  .option('-l, --labels <label>', 'Additional labels to be added to all Loki logs')
+  .option(
+    '-s, --silenceErrors',
+    'If false, errors will be displayed in the console',
+  )
+  .option(
+    '-r, --replaceTimestamp',
+    'Replace pino logs timestamps with Date.now()',
+  )
+  .option(
+    '-l, --labels <label>',
+    'Additional labels to be added to all Loki logs',
+  )
   .option('-a, --convertArrays', 'If true, arrays will be converted to objects')
   .option(
     '-pl, --propsLabels <labels>',
     'Fields in log line to convert to Loki labels (comma separated values)',
   )
-  .option('--no-stdout', 'Disable output to stdout')
+  .option('--no-stdout', 'Disable output to stdout');
 
 /**
  * Create a PinoLokiOptionsContract from cli arguments
  */
 export const createPinoLokiConfigFromArgs = () => {
-  const opts = program.parse(process.argv).opts()
+  const opts = program.parse(process.argv).opts();
 
   const config: LokiOptions = {
     host: opts.hostname,
@@ -39,19 +51,19 @@ export const createPinoLokiConfigFromArgs = () => {
     labels: opts.labels ? JSON.parse(opts.labels) : undefined,
     propsToLabels: opts.propsLabels ? opts.propsLabels.split(',') : [],
     convertArrays: opts.convertArrays,
-  }
+  };
 
   if (opts.user && opts.password) {
-    config.basicAuth = { username: opts.user, password: opts.password }
+    config.basicAuth = { username: opts.user, password: opts.password };
   }
 
-  return config
-}
+  return config;
+};
 
 function main() {
-  const config = createPinoLokiConfigFromArgs()
-  const pinoLoki = build(config)
-  pump(process.stdin, pinoLoki)
+  const config = createPinoLokiConfigFromArgs();
+  const pinoLoki = build(config);
+  pump(process.stdin, pinoLoki);
 }
 
-main()
+main();
