@@ -1,7 +1,7 @@
 {
   "name": "pino-loki-ky",
   "type": "commonjs",
-  "version": "2.3.0-4",
+  "version": "2.4.0",
   "description": "Fork of pino-loki that uses `ky` instead of `got`.",
   "license": "MIT",
   "homepage": "https://github.com/nxht/pino-loki-ky#readme",
