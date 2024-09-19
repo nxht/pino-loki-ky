@@ -38,17 +38,37 @@ export class LogPusher {
   /**
    * Handle push failures
    */
-  #handleFailure(err: unknown) {
+  async #handleFailure(err: unknown) {
     if (this.#options.silenceErrors === true) {
       return;
     }
 
     if (err instanceof HTTPError) {
-      console.error(
-        'Got error when trying to send log to Loki:',
-        `${err.message}\n${err.response?.body}`,
-      );
-      return;
+      if (err.response) {
+        const requestBody = await err.request.json();
+
+        try {
+          const responseBody = await err.response.json();
+
+          console.error(
+            'Got error when trying to send log to Loki\n',
+            err,
+            '\nrequestBody: ',
+            requestBody,
+            '\nresponseBody:',
+            responseBody,
+          );
+          return;
+        } catch (_e) {
+          console.error(
+            'Got error when trying to send log to Loki\n',
+            err,
+            '\nrequestBody: ',
+            requestBody,
+          );
+          return;
+        }
+      }
     }
 
     console.error(
@@ -77,9 +97,13 @@ export class LogPusher {
 
     debug(`[LogPusher] pushing ${lokiLogs.length} logs to Loki`);
 
-    await this.#client
-      .post('loki/api/v1/push', { json: { streams: lokiLogs } })
-      .catch(this.#handleFailure.bind(this));
+    try {
+      await this.#client.post('loki/api/v1/push', {
+        json: { streams: lokiLogs },
+      });
+    } catch (e) {
+      await this.#handleFailure(e);
+    }
 
     debug(`[LogPusher] pushed ${lokiLogs.length} logs to Loki`, {
       logs: lokiLogs,
