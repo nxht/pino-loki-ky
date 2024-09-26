@@ -1,3 +1,6 @@
+> [!WARNING]
+> **DEPRECATED** :  As `pino-loki` uses native fetch by 2.3.1, it's more advisable to use it instead.
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/8337858/188330582-cdbdde50-da1c-47e4-b251-10a32155e6c7.png">
 </p>
